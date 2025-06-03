@@ -1,0 +1,12 @@
+# 递归收集所有源文件和头文件目录
+file(GLOB_RECURSE FREERTOS_SRC "${CMAKE_CURRENT_SOURCE_DIR}/*.c")
+file(GLOB_RECURSE FREERTOS_HEADERS "${CMAKE_CURRENT_SOURCE_DIR}/*.h")
+set(FREERTOS_INCLUDE_DIRS "")
+foreach(header ${FREERTOS_HEADERS})
+    get_filename_component(dir ${header} DIRECTORY)
+    list(APPEND FREERTOS_INCLUDE_DIRS ${dir})
+endforeach()
+list(REMOVE_DUPLICATES FREERTOS_INCLUDE_DIRS)
+
+add_library(freertos STATIC ${FREERTOS_SRC})
+target_include_directories(freertos PUBLIC ${FREERTOS_INCLUDE_DIRS})
